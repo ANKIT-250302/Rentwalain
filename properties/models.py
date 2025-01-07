@@ -29,7 +29,7 @@ class Property(BaseModel):
     available_from = models.DateField()
 
     def __str__(self):
-        return f"{self.title} - {self.address}, {self.city}, {self.state}"
+        return f"{self.landlord} - {self.title} "
 
 
 class PropertyImage(models.Model):

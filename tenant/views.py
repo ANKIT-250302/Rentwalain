@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from tenant.authentication import Authentication,IsTenant
 from rest_framework.viewsets import ModelViewSet 
 from django.contrib.auth.hashers import check_password
-from .serializers import ProfileSerializer,ProfileAuthSerializer,ProfileMeSerializer
+from tenant.serializers import *
 from django_filters.rest_framework import DjangoFilterBackend # type: ignore
 
 class ProfileRegisterViews(ModelViewSet):
@@ -45,7 +45,9 @@ class ProfileMeViews(ModelViewSet):
     
     def list(self, request, *args, **kwargs):
         user = Authentication(request)
-        return Response(user)
+        profile = TenantProfile.objects.filter(id = user.get('id')).first()
+        profile = ProfileMeSerializer(profile)
+        return Response(profile.data)
 
 
 class TenantPropertyViewSet(ModelViewSet):

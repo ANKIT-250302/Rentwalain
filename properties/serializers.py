@@ -15,9 +15,10 @@ class PropertyImageSerializer(serializers.ModelSerializer):
         return data
 
 class PropertyGetSerializer(serializers.ModelSerializer):
+    images = PropertyImageSerializer( many=True)
     class Meta:
         model = Property
-        fields = ['id','title','description','price_per_month']
+        fields = ['id','title','description','price_per_month','images']
 
 class PropertySerializer(serializers.ModelSerializer):
     landlord = serializers.CharField(read_only=True)
@@ -27,6 +28,7 @@ class PropertySerializer(serializers.ModelSerializer):
         fields = ['id','landlord','property_type','title','description','address','city','state','price_per_month','num_of_bedrooms','num_of_bathrooms','available_from','images']
         
     def create(self, validated_data):
+        print(validated_data)
         image_data = validated_data.pop('images', None)  # Extract images from the data
         validated_data['landlord_id'] = self.context.get('user_is')
 
@@ -38,6 +40,7 @@ class PropertySerializer(serializers.ModelSerializer):
             PropertyImage.objects.create(property=property_instance, image=image_data)
 
         return property_instance
+    
 
 
 class PropertyViewSerializer(serializers.ModelSerializer):

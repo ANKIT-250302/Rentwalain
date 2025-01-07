@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'landlord',
     'tenant',
     'properties',
+    'frontend',
 ]
 
 MIDDLEWARE = [
@@ -59,7 +60,7 @@ ROOT_URLCONF = 'Rentwalain.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -134,7 +135,21 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+MEDIA_URL = 'media/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
+SESSION_COOKIE_AGE = 3600 
+BASEURL = 'http://127.0.0.1:8000'
+
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_PAGINATION_CLASS': 'frontend.views.StandardResultsSetPagination',
+#     'PAGE_SIZE': 3
+# }

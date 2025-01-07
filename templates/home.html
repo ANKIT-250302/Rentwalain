@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home | Rentwala
+{% endblock title %}
+
+{% block body %}
+
+<!-- Modal for filter -->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="filterModalLabel">Filter Properties</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Filter form inside the modal -->
+        <form method="GET" action="/">
+          <div class="mb-3">
+            <label for="propertyType" class="form-label">Property Type</label>
+            <select class="form-control" id="propertyType" name="property_type">
+              <option value="">Select Property Type</option>
+              <option value="1">Villa</option>
+              <option value="2">House</option>
+              <option value="3">Apartment</option>
+              <option value="4">Flat</option>
+              <option value="5">Bungalow</option>
+            </select>
+              {% for property_type in property_types %}
+                <option value="{{ property_type.id }}">{{ property_type.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label for="minPrice" class="form-label">Min Price</label>
+            <input type="number" class="form-control" id="minPrice" name="min_price" placeholder="Min Price">
+          </div>
+          
+          <div class="mb-3">
+            <label for="maxPrice" class="form-label">Max Price</label>
+            <input type="number" class="form-control" id="maxPrice" name="max_price" placeholder="Max Price">
+          </div>
+
+          <div class="mb-3">
+            <label for="numOfBedrooms" class="form-label">Number of Bedrooms</label>
+            <input type="number" class="form-control" id="numOfBedrooms" name="num_of_bedrooms" placeholder="Number of Bedrooms">
+          </div>
+
+          <div class="mb-3">
+            <label for="numOfBathrooms" class="form-label">Number of Bathrooms</label>
+            <input type="number" class="form-control" id="numOfBathrooms" name="num_of_bathrooms" placeholder="Number of Bathrooms">
+          </div>
+
+          <div class="mb-3">
+            <label for="availableFrom" class="form-label">Available From</label>
+            <input type="date" class="form-control" id="availableFrom" name="available_from">
+          </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Apply Filters</button>
+      </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+<div class="mx-5 my-5 d-flex flex-wrap justify-content-evenly">
+  {% for property in properties %}
+    <div class="card" style="width: 18rem; margin: 10px;">
+      <div class="card-img-top mb-3" style="background-image: url('{{ property.images.0.image }}'); background-size: cover; height: 200px;">
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ property.title }}</h5>
+        <p class="card-text">{{ property.city }}</p>
+        <p class="card-text">{{ property.description }}</p>
+      </div>
+      <a href="/tenant/home/{{property.id}}/" class="btn btn-primary">View</a>
+    </div>
+    
+  {% endfor %}
+</div>
+
+<div class='d-flex justify-content-center'>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item {% if previous is none %}disabled{% endif %}">
+            <a class="page-link" href="{{ previous }}">Previous</a>
+        </li>
+        <li class="page-item {% if next is none %}disabled{% endif %}">
+            <a class="page-link" href="{% if next != None %}{{ next }}{% else %}#{% endif %}">Next</a>
+        </li>
+    </ul>
+</nav>
+</div>
+{% endblock body %}

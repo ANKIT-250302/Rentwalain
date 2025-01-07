@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Property
+{% endblock title %}
+
+{% block body %}
+<div class='container'>
+    <div class='vh-75 w-100'>
+        <div class="container-xl px-4 my-4">
+            <div class="row justify-content-center">
+                <div class="col-xl-8">
+                    <!-- Property details card-->
+                    <div class="card mb-4">
+                        <div class="card-header">Property Details</div>
+                        <div class="card-body">
+                            <form action="/profile/addProperty/" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                
+                                <!-- Property Type Dropdown -->
+                                <div class="row gx-3 mb-3">
+                                    <div class="col-md-12">
+                                        <label class="small mb-1" for="inputPropertyType">Property Type</label>
+                                        <select class="form-control" name="property_type">
+                                            <option value="">Select Property Type</option>
+                                            {% for property_type in property_types %}
+                                                <option value="{{ property_type.id }}">{{ property_type.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Title and Description -->
+                                <div class="row gx-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputTitle">Title</label>
+                                        <input class="form-control" name="title" type="text" placeholder="Enter property title">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputDescription">Description</label>
+                                        <textarea class="form-control" name="description" placeholder="Enter property description"></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Address and City -->
+                                <div class="row gx-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputAddress">Address</label>
+                                        <input class="form-control" name="address" type="text" placeholder="Enter property address">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputCity">City</label>
+                                        <input class="form-control" name="city" type="text" placeholder="Enter city">
+                                    </div>
+                                </div>
+
+                                <!-- State and Price -->
+                                <div class="row gx-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputState">State</label>
+                                        <input class="form-control" name="state" type="text" placeholder="Enter state">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputPrice">Price per Month</label>
+                                        <input class="form-control" name="price_per_month" type="number" placeholder="Enter price per month">
+                                    </div>
+                                </div>
+
+                                <!-- Bedrooms and Bathrooms -->
+                                <div class="row gx-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputBedrooms">Number of Bedrooms</label>
+                                        <input class="form-control" name="num_of_bedrooms" type="number" placeholder="Enter number of bedrooms">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputBathrooms">Number of Bathrooms</label>
+                                        <input class="form-control" name="num_of_bathrooms" type="number" placeholder="Enter number of bathrooms">
+                                    </div>
+                                </div>
+
+                                <!-- Available From and Images -->
+                                <div class="row gx-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputAvailableFrom">Available From</label>
+                                        <input class="form-control" name="available_from" type="date">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="inputImages">Property Images</label>
+                                        <input class="form-control" name="images" type="file" >
+                                    </div>
+                                </div>
+
+                                <!-- Submit Button-->
+                                <div class="d-flex justify-content-center">
+                                    <input class="btn btn-primary" type="submit" value="Add Property">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

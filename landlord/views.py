@@ -45,4 +45,8 @@ class ProfileMeViews(ModelViewSet):
         data = LandlordProfile.objects.get(id= id)
         landlord = ProfileMeSerializer(data)
         return Response(landlord.data)
-        # return Response(landlord.errors)
+    
+    def get_queryset(self):
+        user = Authentication(self.request)
+        id = user.get('id')
+        return LandlordProfile.objects.filter(id=id)

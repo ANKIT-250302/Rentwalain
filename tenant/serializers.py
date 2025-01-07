@@ -19,4 +19,4 @@ class ProfileAuthSerializer(serializers.ModelSerializer):
 class ProfileMeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TenantProfile
-        fields = '__all__'
+        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number','is_active']
