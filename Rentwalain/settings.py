@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'tenant',
     'properties',
     'frontend',
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -145,11 +146,6 @@ MEDIA_URL = 'media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
-SESSION_COOKIE_AGE = 3600 
+SESSION_COOKIE_AGE = 3600
 BASEURL = 'http://127.0.0.1:8000'
 
-
-# REST_FRAMEWORK = {
-#     'DEFAULT_PAGINATION_CLASS': 'frontend.views.StandardResultsSetPagination',
-#     'PAGE_SIZE': 3
-# }

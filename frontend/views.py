@@ -15,7 +15,6 @@ class StandardResultsSetPagination(PageNumberPagination):
     max_page_size = 10
 
 class HomeView(APIView):
-    
     pagination_class = StandardResultsSetPagination
     
     def get(self, request):
@@ -61,9 +60,15 @@ class HomeView(APIView):
             "previous": paginated_response.data.get('previous'),
             "properties": paginated_response.data.get('results')
             }
-            print(context['properties'])
-
         return render(request, 'home.html',context)
+    
+class DetailsView(APIView):
+    def get(self,request,id):
+        api_url = BASEURL+f"/tenant/home/{id}"
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            data = response.json()
+        return render(request,'details.html',{'property':data})
 
 class ProfileView(APIView):
     def get(self,request):
@@ -102,24 +107,21 @@ class ProfileView(APIView):
     def post(self,request,id):
         token = request.session.get('auth_token')
         headers = {'App-AUTH': token}
-        form_data = {
-            "first_name": request.POST.get("first_name"),
-            "last_name": request.POST.get("last_name"),
-            "phone_number": request.POST.get("phone_number"),
-            "email": request.POST.get("email"),
-            "is_active": request.POST.get("is_active") == "on",}
-        
+        form_data = request.POST.copy()
+        file={
+            'profilepic':request.FILES.get("profilepic")
+        }
+        form_data['is_active'] = form_data.get('is_active') == 'on'
         user_type = request.session.get('user_type')
         if user_type == 'landlord':
             profile_url = f'{BASEURL}/landlord/profile/{id}/'
         else:
             profile_url = f'{BASEURL}/tenant/profile/{id}'
-        response = requests.patch(profile_url, headers=headers, json=form_data)
+        response = requests.patch(profile_url, headers=headers, json=form_data ,files=file)
         if response.status_code == 200:
             user_data = response.json()
             return redirect('profile') 
-        return render(request,'profile.html')
-            
+        return render(request,'profile.html')      
 
 class LoginView(APIView):
     def get(self, request):
@@ -150,15 +152,12 @@ class RegisterView(APIView):
         return render(request, 'register.html')
     
     def post(self, request):
-        # Extract form data
         first_name = request.data.get('first_name')
         last_name = request.data.get('last_name')
         email = request.data.get('email')
         phone_number = request.data.get('phone_number')
         password = request.data.get('password')
         usertype = request.data.get('usertype')
-
-        # Validate form data
         if not (first_name and last_name and email and phone_number and password and usertype):
             messages.error(request, "All fields are required.")
             return redirect('register')
@@ -170,8 +169,6 @@ class RegisterView(APIView):
             "phone_number": phone_number,
             "password": password,
         }
-
-        # Determine the API URL based on the user type
         if usertype == 'landlord':
             api_url = BASEURL+"/landlord/register/"
         elif usertype == 'tenant':
@@ -179,29 +176,19 @@ class RegisterView(APIView):
         else:
             messages.error(request, "Invalid user type.")
             return redirect('register')
-
-        # Make a POST request to the appropriate endpoint
         try:
-            response = requests.post(api_url, json=payload)  # Use json=payload for JSON request
+            response = requests.post(api_url, json=payload) 
         except requests.exceptions.RequestException as e:
             messages.error(request, f"Failed to connect to the server: {e}")
             return redirect('register')
-
-        # Handle the response
-        if response.status_code == 201:  # Successfully created
+        if response.status_code == 201:  
             messages.success(request, "Registration successful. Please log in.")
             return redirect('login')
         else:
-            # Extract error message from response
             error_message = response.json().get('detail', response.text)
             error_message= json.loads(error_message).get("email", [None])[0]
-
             messages.error(request, error_message)
             return redirect('register')
-
-    
-
-            
             
 class LogoutView(APIView):
     def get(self,request):
@@ -211,7 +198,6 @@ class LogoutView(APIView):
         messages.success(request, "Logged out successfully")
         return redirect('/login/')
         
-
 class AddPropertyView(APIView):
     def get(self,request):
         if request.session.get('user_type') == 'landlord' and request.session.get('auth_token'):
@@ -222,11 +208,9 @@ class AddPropertyView(APIView):
     def post(self, request, *args, **kwargs):
         token = request.session.get('auth_token')
         headers = {'App-AUTH': token}
-
         data=request.data
         data.pop('images')
-        # Get the uploaded file(s)
-        images = request.FILES.get('images')  # Ensure this is the correct form field name
+        images = request.FILES.get('images')  
 
         # Prepare the 'files' dictionary for the request
         files = {}
@@ -261,6 +245,7 @@ class ViewEditProperty(APIView):
         data = request.POST.copy()
         data['is_active'] = data.get('is_active') == 'on'
         return redirect('profile')
+
 class DeleteProperty(APIView):
     def get(self,request,id):
         api_url = BASEURL+f'/property/rentals/{id}/'
@@ -270,3 +255,28 @@ class DeleteProperty(APIView):
         messages.success(request,"Property deleted")
         return redirect('profile')
         
+class EditImageView(APIView):
+    def post(self, request, id):
+        api_url = BASEURL + f'/property/propertyImages/'
+        token = request.session.get('auth_token')
+        if not token:
+            messages.error(request, "Authentication token is missing.")
+            return redirect('profile')
+
+        headers = {'App-AUTH': token}
+        data = {"property": id}
+        file = {'image': request.FILES.get('image')}
+        
+        response = requests.post(api_url, headers=headers, data=data, files=file)
+        if response.status_code == 201:
+            messages.success(request, "Image added successfully")
+        else:
+            messages.error(request, "Failed to add image!")
+        return redirect('profile')
+    def get(self,request,id):
+        api_url = BASEURL+f'/property/propertyImages/{id}/'
+        token = request.session.get('auth_token')
+        headers = {'App-AUTH': token}
+        response = requests.delete(api_url, headers=headers)
+        messages.success(request,"Image deleted")
+        return redirect('profile')

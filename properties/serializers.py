@@ -6,7 +6,6 @@ class PropertyImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = PropertyImage
         fields = ['id','property','image']
-        
     def validate_property(self, data):
         properties = Property.objects.filter(landlord_id = self.context.get('user_is'))
         owned_property_ids = properties.values_list('id', flat=True)
@@ -28,7 +27,6 @@ class PropertySerializer(serializers.ModelSerializer):
         fields = ['id','landlord','property_type','title','description','address','city','state','price_per_month','num_of_bedrooms','num_of_bathrooms','available_from','images']
         
     def create(self, validated_data):
-        print(validated_data)
         image_data = validated_data.pop('images', None)  # Extract images from the data
         validated_data['landlord_id'] = self.context.get('user_is')
 

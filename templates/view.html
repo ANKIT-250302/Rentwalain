@@ -5,7 +5,8 @@ Property | Rentwala
 {% endblock title %}
 
 {% block body %}
-<div class='border-bottom shadow w-100' style="padding:2rem 7rem 1.2rem 7rem; background-color:#69aff0;" >
+<div class='d-flex' style="background-color:#69aff0;">
+  <div class='border-bottom shadow w-75' style="padding:2rem 7rem 1.3rem 7rem;" >
     <h3 class='d-flex justify-content-center fs-1 '>P R O P E R T Y - D E T A I L S</h3>
     <form method="POST" action="/profile/view/{{property.id}}/" enctype="multipart/form-data">
         {% csrf_token %}
@@ -90,13 +91,26 @@ Property | Rentwala
       
         <button type="submit" class="btn btn-primary">Save</button>
       </form>
+  </div>
+  <div class="w-25 d-flex flex-column align-items-center justify-content-center">
+    <form action="/profile/image/add/{{property.id}}" method="POST" enctype="multipart/form-data">
+      <div class="d-flex flex-column  align-items-center">
+        <label class=" mb-3 fs-3 fw-bold" for="inputImages">Property Images</label>
+        <input class="form-control mb-3" name="image" type="file" >
+        <button type="submit" class="btn btn-secondary">Add</button>
+      </div>
+    </form>
+</div>
 </div>
 <div class=" mb-5 mt-4 container w-100 d-flex flex-column justify-content-center align-items-center">
     <h3 class=' fs-1'>I M A G E S</h3>
     {%if property%}
     <div class="d-flex flex-wrap m-2">
           {% for image in property.images %}
-            <img src="{{image.image}}" alt="image" width='300' class="shadow img-fluid rounded m-2">
+            <div class="d-flex flex-column  align-items-center">
+              <img src="{{image.image}}" alt="image" width='400' class="shadow img-fluid rounded m-2">
+              <a class="center w-auto btn btn-danger shadow" href="/profile/image/delete/{{image.id}}/">Delete</a>
+            </div>
             {% endfor %}
         </div>
     {%else%}

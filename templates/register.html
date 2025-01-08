@@ -38,19 +38,12 @@ Register | Rentwala
             </div>
         </div>
         <fieldset class="row mb-3">
-            <legend class="col-form-label col-sm-2 pt-0">User Type</legend>
-            <div class="col-sm-10">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="usertype" id="gridRadios1" value="landlord" checked>
-                    <label class="form-check-label" for="gridRadios1">
-                        LandLord
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="usertype" id="gridRadios2" value="tenant">
-                    <label class="form-check-label" for="gridRadios2">
-                        Tenant
-                    </label>
+            <div><legend class="col-form-label col-sm-2 pt-0 ">User Type</legend>
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                    <input type="radio" class="btn-check" name="usertype" id="btnradio1" autocomplete="off" value="landlord" checked>
+                    <label class="btn btn-outline-danger" for="btnradio1">LANDLORD</label>
+                    <input type="radio" class="btn-check" name="usertype" id="btnradio2" value="tenant" autocomplete="off">
+                    <label class="btn btn-outline-danger" for="btnradio2">TENANT</label>
                 </div>
             </div>
         </fieldset>

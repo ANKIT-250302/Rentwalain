@@ -37,3 +37,5 @@ class PropertyImage(models.Model):
     image = models.ImageField(upload_to='images/',null=True,blank=True)
     def __str__(self):
         return f"Owner {self.property.landlord} Image for {self.property.title}"
+    class Meta:
+        ordering = ['-id']
