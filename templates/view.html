@@ -16,7 +16,7 @@ Property | Rentwala
           <div class="col-md-6">
             <div class="mb-3">
               <label for="landlord" class="form-label">Landlord</label>
-              <input type="text" class=" form-control" id="landlord" name="landlord" value="{{ property.landlord }}">
+              <input disabled type="text" class=" form-control" id="landlord" name="landlord" value="{{property.landlord.first_name }} {{property.landlord.last_name}}">
             </div>
       
             <div class="mb-3">

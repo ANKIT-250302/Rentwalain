@@ -17,4 +17,6 @@ urlpatterns = [
     path('profile/delete/<int:id>/',DeleteProperty.as_view(),name='deleteProperty'),
     path('profile/image/delete/<int:id>/',EditImageView.as_view(),name='deleteImage'),
     
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from properties.models import Property,PropertyType,PropertyImage
+from properties.models import *
+from landlord.serializers import LandlordSerializer
 from rest_framework.response import Response
 
 class PropertyImageSerializer(serializers.ModelSerializer):
@@ -42,7 +43,7 @@ class PropertySerializer(serializers.ModelSerializer):
 
 
 class PropertyViewSerializer(serializers.ModelSerializer):
-    landlord = serializers.CharField(read_only=True)
+    landlord = LandlordSerializer(read_only=True)
     images = PropertyImageSerializer( many=True)
     property_type= serializers.CharField()
     class Meta:

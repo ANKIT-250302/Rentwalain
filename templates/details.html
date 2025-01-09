@@ -10,7 +10,7 @@ Home | Rentwala
 </div>
 <div class='w-auto p-2' style='background-color:rgb(225, 187, 150);'>
     <div class='d-flex justify-content-center fs-5'>O W N E R</div>
-    <div class='d-flex justify-content-center mb-2 ' style='font-size:2rem;'>{{property.landlord | upper}}</div>
+    <div class='d-flex justify-content-center mb-2 ' style='font-size:2rem;'>{{property.landlord.first_name | upper}} {{property.landlord.last_name | upper}}</div>
     <div>
         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
@@ -21,7 +21,6 @@ Home | Rentwala
             <div class="carousel-inner">
                 {% for image in property.images %}
                 <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                    {% comment %} <img src="{{ image.image }}" class="d-block w-100" alt="Property Image"> {% endcomment %}
                     <div class='shadow rounded' style="height: 58.5vh; background-image: url('{{image.image}}'); background-size: cover; background-position: center;">
 
                     </div>
@@ -38,7 +37,7 @@ Home | Rentwala
             </button>
           </div>
     </div>
-    <div class="container text-white py-3">
+    <div class="container text-white py-4">
         <div class="row g-3">
             <!-- First Div: Property Info -->
             <div class="col-12 col-md-4">
@@ -70,7 +69,9 @@ Home | Rentwala
             </div>
         </div>
     </div>
-    
-    </div>
 </div>
+
+{% comment %} <div class="vh-100 w-full" style='background-color:rgb(225, 187, 150);'>
+    
+</div> {% endcomment %}
 {% endblock body %}

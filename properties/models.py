@@ -1,5 +1,9 @@
+import os
+from django.db.models.signals import post_delete
 from django.db import models
+from django.dispatch import receiver
 from landlord.models import LandlordProfile
+
 
 class BaseModel(models.Model):
     is_active = models.BooleanField(default=True)
@@ -39,3 +43,18 @@ class PropertyImage(models.Model):
         return f"Owner {self.property.landlord} Image for {self.property.title}"
     class Meta:
         ordering = ['-id']
+
+
+
+@receiver(post_delete, sender=Property)
+def delete_property_images(sender, instance, **kwargs):
+    for image in instance.images.all():
+        if image.image:
+            if os.path.isfile(image.image.path):
+                os.remove(image.image.path)
+                
+@receiver(post_delete, sender=PropertyImage)
+def delete_individual_image(sender, instance, **kwargs):
+    if instance.image:
+        if os.path.isfile(instance.image.path):
+            os.remove(instance.image.path)

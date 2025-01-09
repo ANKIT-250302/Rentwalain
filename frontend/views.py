@@ -251,7 +251,7 @@ class DeleteProperty(APIView):
         api_url = BASEURL+f'/property/rentals/{id}/'
         token = request.session.get('auth_token')
         headers = {'App-AUTH': token}
-        response = requests.delete(api_url, headers=headers)
+        requests.delete(api_url, headers=headers)
         messages.success(request,"Property deleted")
         return redirect('profile')
         
@@ -280,3 +280,4 @@ class EditImageView(APIView):
         response = requests.delete(api_url, headers=headers)
         messages.success(request,"Image deleted")
         return redirect('profile')
+    
