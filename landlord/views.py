@@ -1,7 +1,7 @@
-from django.shortcuts import render
-import jwt # type: ignore
+import jwt 
 from landlord.serializers import*
 from rest_framework import status
+from django.shortcuts import render
 from .models import LandlordProfile
 from django.shortcuts import render
 from rest_framework.views import APIView
