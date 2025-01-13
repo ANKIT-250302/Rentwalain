@@ -94,6 +94,7 @@ Property | Rentwala
   </div>
   <div class="w-25 d-flex flex-column align-items-center justify-content-center">
     <form action="/profile/image/add/{{property.id}}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
       <div class="d-flex flex-column  align-items-center">
         <label class=" mb-3 fs-3 fw-bold" for="inputImages">Property Images</label>
         <input class="form-control mb-3" name="image" type="file" >

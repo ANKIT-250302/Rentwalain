@@ -19,7 +19,7 @@ class PropertyViewSet(ModelViewSet):
         'list' : PropertyGetSerializer,
         'retrieve' : PropertyViewSerializer,
     }
-    default_serializer = PropertyGetSerializer
+    default_serializer = PropertySerializer
     
     def get_serializer_class(self):
         return self.serializer_class.get(self.action, self.default_serializer)

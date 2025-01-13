@@ -117,7 +117,7 @@ class ProfileView(APIView):
             profile_url = f'{BASEURL}/landlord/profile/{id}/'
         else:
             profile_url = f'{BASEURL}/tenant/profile/{id}'
-        response = requests.patch(profile_url, headers=headers, json=form_data ,files=file)
+        response = requests.patch(profile_url, headers=headers, data=form_data ,files=file)
         if response.status_code == 200:
             user_data = response.json()
             return redirect('profile') 
@@ -242,8 +242,14 @@ class ViewEditProperty(APIView):
         else:
             return redirect('login')
     def post(self,request,id):
+        api_url = BASEURL + f'/property/rentals/{id}/'
+        token = request.session.get('auth_token')
+        headers = {'App-AUTH': token}
         data = request.POST.copy()
-        data['is_active'] = data.get('is_active') == 'on'
+        
+        response = requests.patch(api_url, headers=headers, json=data)
+        if response.status_code != 200:
+            messages.error("Operation unsuccessfull")
         return redirect('profile')
 
 class DeleteProperty(APIView):
