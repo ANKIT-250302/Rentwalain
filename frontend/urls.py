@@ -16,6 +16,8 @@ urlpatterns = [
     path('profile/view/<int:id>/',ViewEditProperty.as_view(),name='viewProperty'),
     path('profile/delete/<int:id>/',DeleteProperty.as_view(),name='deleteProperty'),
     path('profile/image/delete/<int:id>/',EditImageView.as_view(),name='deleteImage'),
+    path("apply/<int:id>/", ApplyForProperty.as_view(), name="applyForProperty"),
+    path("applicants/", ApplicantView.as_view(), name="applicants"),
     
 ]
 

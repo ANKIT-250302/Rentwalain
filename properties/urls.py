@@ -8,6 +8,7 @@ router = DefaultRouter()
 router.register('rentals', PropertyViewSet, basename='property')
 router.register('propertytype', PropertyTypeViewSet, basename='propertytype')
 router.register('propertyImages', PropertyImageViewSet, basename='propertyimages')
+router.register(r'applications', ApplicationViewSet, basename='application')
 
 
 urlpatterns = router.urls + [

@@ -9,9 +9,11 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import dj_database_url
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -38,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'django_filters',
     'landlord',
     'tenant',
@@ -47,6 +50,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -77,24 +81,26 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Rentwalain.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'rentwala',                      
+#         'USER': 'postgres',
+#         'PASSWORD': '@Ankit425',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
 #     }
 # }
 
+import dj_database_url
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'rentwala',                      
-        'USER': 'postgres',
-        'PASSWORD': '@Ankit425',
-        'HOST': 'localhost',
+        'NAME': 'postgres',
+        'USER': 'postgres.wgnxmlzskxpmdrtixbvg',
+        'PASSWORD': '@Ankit425',  # Replace with your actual password
+        'HOST': 'aws-0-ap-south-1.pooler.supabase.com',
         'PORT': '5432',
     }
 }
@@ -149,3 +155,5 @@ MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 SESSION_COOKIE_AGE = 3600
 BASEURL = 'http://127.0.0.1:8000'
 
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True

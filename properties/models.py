@@ -3,6 +3,8 @@ from django.db.models.signals import post_delete
 from django.db import models
 from django.dispatch import receiver
 from landlord.models import LandlordProfile
+from tenant.models import TenantProfile
+
 
 
 class BaseModel(models.Model):
@@ -58,3 +60,10 @@ def delete_individual_image(sender, instance, **kwargs):
     if instance.image:
         if os.path.isfile(instance.image.path):
             os.remove(instance.image.path)
+            
+class Application(BaseModel):
+    property = models.ForeignKey(Property, on_delete=models.CASCADE)
+    tenant = models.ForeignKey(TenantProfile, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f"Tenant:->{self.tenant.first_name} {self.tenant.last_name} | Owner:->{self.property.landlord.first_name}  {self.property.landlord.last_name}"

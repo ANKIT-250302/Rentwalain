@@ -1,6 +1,8 @@
 import json
-from Rentwalain.settings import BASEURL
-import requests # type: ignore
+import jwt
+from Rentwalain.settings import BASEURL,SECRET_KEY
+import requests 
+from rest_framework import status
 from django.contrib import messages
 from rest_framework.views import APIView
 from properties.models import PropertyType
@@ -116,7 +118,7 @@ class ProfileView(APIView):
         if user_type == 'landlord':
             profile_url = f'{BASEURL}/landlord/profile/{id}/'
         else:
-            profile_url = f'{BASEURL}/tenant/profile/{id}'
+            profile_url = f'{BASEURL}/tenant/profile/{id}/'
         response = requests.patch(profile_url, headers=headers, data=form_data ,files=file)
         if response.status_code == 200:
             user_data = response.json()
@@ -249,7 +251,8 @@ class ViewEditProperty(APIView):
         
         response = requests.patch(api_url, headers=headers, json=data)
         if response.status_code != 200:
-            messages.error("Operation unsuccessfull")
+            print(response.status_code)
+            messages.error(request,"Operation unsuccessfull")
         return redirect('profile')
 
 class DeleteProperty(APIView):
@@ -286,4 +289,25 @@ class EditImageView(APIView):
         response = requests.delete(api_url, headers=headers)
         messages.success(request,"Image deleted")
         return redirect('profile')
-    
+
+class ApplyForProperty(APIView):
+    def get(self,request,id):
+        token = request.session.get('auth_token')
+        if not token:
+            return redirect('login')
+        token = token.split(" ")[1]
+        tenant = jwt.decode(token ,SECRET_KEY, algorithms=["HS256"])
+        data={
+        "property": id,
+        "tenant": tenant["id"]
+        }
+        api_url = BASEURL+f"/tenant/apply/"
+        response = requests.post(api_url, json= data )
+        return redirect('home')
+class ApplicantView(APIView):
+    def get(self,request):
+        token = request.session.get('auth_token')
+        headers = {'App-AUTH': token}
+        api_url = BASEURL+f"/property/applications/"
+        response = requests.get(api_url,headers=headers)
+        return Response(response.json())

@@ -8,6 +8,7 @@ router.register('register', ProfileRegisterViews, basename='tenant_register')
 router.register('login',ProfileAuthViews, basename='tenant_login')
 router.register('profile',ProfileMeViews,basename='tenant_profile')
 router.register('home',TenantPropertyViewSet,basename='home')
+router.register("apply",ApplicantView,basename="apply_rent")
 
 urlpatterns = router.urls + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT) + [
 ]

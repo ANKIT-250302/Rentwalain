@@ -12,6 +12,8 @@ from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.hashers import check_password
 from tenant.serializers import *
 from django_filters.rest_framework import DjangoFilterBackend # type: ignore
+from django.core.cache import cache
+
 
 class ProfileRegisterViews(ModelViewSet):
     serializer_class = ProfileSerializer
@@ -49,6 +51,11 @@ class ProfileMeViews(ModelViewSet):
         profile = ProfileMeSerializer(profile)
         return Response(profile.data)
 
+    def get_queryset(self):
+        user = Authentication(self.request)
+        id = user.get('id')
+        return TenantProfile.objects.filter(id=id)
+
 
 class TenantPropertyViewSet(ModelViewSet):
     queryset = Property.objects.all().order_by('-created_at')
@@ -64,3 +71,34 @@ class TenantPropertyViewSet(ModelViewSet):
     
     def get_serializer_class(self):
         return self.serializer_class.get(self.action, self.default_serializer)
+    
+    def retrieve(self, request, *args, **kwargs):
+        property_id = kwargs.get('pk')
+        cache_key = f"property_{property_id}"
+        cached_data = cache.get(cache_key)
+
+        if cached_data:
+            print(".......Cache.......")
+            return Response(cached_data)
+
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        data = serializer.data
+        
+        cache.set(cache_key, data, timeout=60 * 15)
+        print(".......DB.......")
+        return Response(data)
+    
+class ApplicantView(ModelViewSet):
+    queryset = Application.objects.all()
+    serializer_class = ApplicationSerializer
+    http_method_names = ["post"]
+    
+    def create(self, request, *args, **kwargs):
+        applicant_data = request.data
+        property_id = applicant_data['property']
+        tenant_id = applicant_data['tenant']
+        if not Application.objects.filter(tenant_id=tenant_id, property_id=property_id).exists():
+            return super().create(request, *args, **kwargs)
+        else:
+            return Response({"error": "Application already exists for this tenant and property"})
