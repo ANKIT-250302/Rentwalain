@@ -153,7 +153,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 SESSION_COOKIE_AGE = 3600
-BASEURL = 'http://127.0.0.1:8000'
+# BASEURL = 'http://127.0.0.1:8000'
+BASEURL = 'https://rentwalain.onrender.com/'
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
